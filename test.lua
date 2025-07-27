@@ -1,6 +1,27 @@
 local PlayerFarm:Folder = nil
 local WantedPlant = nil
 local WantedWeight = 0
+local needed_plant = {
+	"Tomato",
+	"Strawberry",
+	"Blueberry",
+	"Orange Tulip",
+	"Corn",
+	"Daffodil",
+	"Bamboo",
+	"Apple",
+	"Coconut",
+	"Pumpkin",
+	"Watermelon",
+	"Cactus",
+	"Dragon Fruit",
+	"Mango",
+	"Grape",
+	"Mushroom",
+	"Pepper",
+	"Cacao"
+}
+
 
 function log(msg)
 	print(msg)
@@ -97,6 +118,39 @@ function compareCleanedNames(str1, str2)
 
 	return clean1 == clean2
 end
+function DumpFarm()
+	local Fruits = {}
+	for i,MotherPlant in pairs(PlayerFarm:WaitForChild("Important"):WaitForChild("Plants_Physical"):GetChildren()) do
+		if MotherPlant:FindFirstChild("Fruits") then
+			for i, plant:Instance in pairs(MotherPlant.Fruits:GetChildren()) do
+				table.insert(Fruits, plant)
+			end
+		else
+			table.insert(Fruits, MotherPlant)
+		end
+	end
+	return Fruits
+end
+function ScanFarm()
+	for i,MotherPlant in pairs(PlayerFarm:WaitForChild("Important"):WaitForChild("Plants_Physical"):GetChildren()) do
+		if compareCleanedNames(MotherPlant.Name, WantedPlant) then
+			log("Found a good plant")
+			for i, plant:Instance in pairs(DumpFarm()) do
+				if plant.Weight.Value >= tonumber(WantedWeight) then
+					if plant:GetAttribute("Tranquil") then
+						for i,part in pairs(plant:GetChildren()) do
+							if part:FindFirstChild("ProximityPrompt") then
+								fireproximityprompt(part:FindFirstChild("ProximityPrompt"))
+								return
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
 function ClaimTranquilPlant()
 	if PlayerFarm == nil then
 		log("Player farm not found")
@@ -130,20 +184,71 @@ function ClaimTranquilPlant()
 		end
 	end
 end
+function FetchTask()
+	WantedPlant,WantedWeight = parseItemInfo(game.Workspace:WaitForChild("Interaction").UpdateItems["Corrupted Zen"]["Zen Platform"].BillboardPart.BillboardGui.ShecklesAmountFrame.ShecklesAmountLabel.Text)
+end
 function ScanBackpack()
 	for i, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-		if matchesCriteria(ParseToolName(item.Name), WantedPlant, tonumber("0.01"), {"Tranquil"}) then
+		if matchesCriteria(ParseToolName(item.Name), WantedPlant, tonumber(WantedWeight), {"Tranquil"}) then
 			game.Players.LocalPlayer.Character.Humanoid:EquipTool(item)
 			return
 		end
 
 	end
 end
+function SubmitToTheDickHead()
+	local args = {
+		"SubmitToCorruptedMonk"
+	}
+	game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("ZenQuestRemoteEvent"):FireServer(unpack(args))
+end
+function Plant(Seed:string)
+	local args = {
+		vector.create(24.67923355102539, 0.13552704453468323, -154.42941284179688),
+		"Seed"
+	}
+	game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("Plant_RE"):FireServer(unpack(args))
+end
+
 --task.spawn(function()
---	while true do
---		WantedPlant,WantedWeight = parseItemInfo(game.Workspace:WaitForChild("Interaction").UpdateItems["Corrupted Zen"]["Zen Platform"].BillboardPart.BillboardGui.ShecklesAmountFrame.ShecklesAmountLabel.Text)
---		wait(1)
+--	-- Main Loop
+--	while task.wait(1) do
+--		FetchTask()
+--		ClaimTranquilPlant()
+--		ScanBackpack()
+--		SubmitToTheDickHead()
 --	end
 --end)
-WantedPlant,WantedWeight = parseItemInfo(game.Workspace:WaitForChild("Interaction").UpdateItems["Corrupted Zen"]["Zen Platform"].BillboardPart.BillboardGui.ShecklesAmountFrame.ShecklesAmountLabel.Text)
-ScanBackpack()
+
+
+-- check needed plants
+
+for i,v in pairs(DumpFarm()) do
+	function GetCleanName(string)
+		return string.lower(string.gsub(string, "%s+", ""))
+	end
+	local found = {}
+	local missing = {}
+	local plantedNames = {}
+	local farmPlants = DumpFarm()
+
+	-- Collect all currently planted fruits
+	for _, plant in pairs(farmPlants) do
+		local cleanedName = GetCleanName(plant.Name)
+		plantedNames[cleanedName] = true
+	end 
+
+	for _, needed in ipairs(needed_plant) do
+		local cleanedNeeded = GetCleanName(needed)
+		if plantedNames[cleanedNeeded] then
+			table.insert(found, needed)
+		else
+			table.insert(missing, needed)
+		end
+	end
+
+	log("❌ Missing plants:")
+	for _, name in ipairs(missing) do
+		log("  - " .. name)
+	end
+end
