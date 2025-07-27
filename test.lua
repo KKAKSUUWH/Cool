@@ -34,31 +34,6 @@ function parseItemInfo(itemString)
 
 	return itemName, weight
 end
-function parseBackpackItemInfo(itemString)
-	-- Extract mutations, item name, and weight
-	local mutationsStr, itemName, weightWithUnit = string.match(itemString, "^%[(.-)%]%s+(.-)%s+%[(.-)%]$")
-	if not mutationsStr or not itemName or not weightWithUnit then
-		return nil
-	end
-
-	-- Split mutations into a table
-	local mutations = {}
-	for mut in string.gmatch(mutationsStr, "[^,%s]+") do
-		table.insert(mutations, mut)
-	end
-
-	-- Extract numeric weight
-	local weight = tonumber(string.match(weightWithUnit, "([%d%.]+)"))
-	if not weight then
-		return nil
-	end
-
-	return {
-		mutations = mutations,
-		itemName = itemName,
-		weight = weight,
-	}
-end
 function matchesCriteria(parsedItem, wantedName, wantedWeight, wantedMutations)
 	if not parsedItem then return false end
 
@@ -89,6 +64,31 @@ function matchesCriteria(parsedItem, wantedName, wantedWeight, wantedMutations)
 	end
 
 	return hasMutation
+end
+function ParseToolName(itemString)
+	-- Extract mutations, item name, and weight
+	local mutationsStr, itemName, weightWithUnit = string.match(itemString, "^%[(.-)%]%s+(.-)%s+%[(.-)%]$")
+	if not mutationsStr or not itemName or not weightWithUnit then
+		return nil
+	end
+
+	-- Split mutations into a table
+	local mutations = {}
+	for mut in string.gmatch(mutationsStr, "[^,%s]+") do
+		table.insert(mutations, mut)
+	end
+
+	-- Extract numeric weight
+	local weight = tonumber(string.match(weightWithUnit, "([%d%.]+)"))
+	if not weight then
+		return nil
+	end
+
+	return {
+		mutations = mutations,
+		itemName = itemName,
+		weight = weight,
+	}
 end
 function compareCleanedNames(str1, str2)
 	-- Remove all spaces and convert to lowercase
@@ -132,16 +132,17 @@ function ClaimTranquilPlant()
 end
 function ScanBackpack()
 	for i, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-		if matchesCriteria(parseBackpackItemInfo(item.Name), WantedPlant, "0.01", "Tranquil") then
+		if matchesCriteria(ParseToolName(item.Name), WantedPlant, "0.01", "Tranquil") then
 			warn("FOUND IN BACKPACK")
 		end
 
 	end
 end
-task.spawn(function()
-	while true do
-		WantedPlant,WantedWeight = parseItemInfo(game.Workspace:WaitForChild("Interaction").UpdateItems["Corrupted Zen"]["Zen Platform"].BillboardPart.BillboardGui.ShecklesAmountFrame.ShecklesAmountLabel.Text)
-		wait(1)
-	end
-end)
+--task.spawn(function()
+--	while true do
+--		WantedPlant,WantedWeight = parseItemInfo(game.Workspace:WaitForChild("Interaction").UpdateItems["Corrupted Zen"]["Zen Platform"].BillboardPart.BillboardGui.ShecklesAmountFrame.ShecklesAmountLabel.Text)
+--		wait(1)
+--	end
+--end)
+WantedPlant,WantedWeight = parseItemInfo(game.Workspace:WaitForChild("Interaction").UpdateItems["Corrupted Zen"]["Zen Platform"].BillboardPart.BillboardGui.ShecklesAmountFrame.ShecklesAmountLabel.Text)
 ScanBackpack()
