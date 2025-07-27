@@ -34,6 +34,38 @@ function parseItemInfo(itemString)
 
 	return itemName, weight
 end
+
+function matchesCriteria(parsedItem, wantedName, wantedWeight, wantedMutations)
+	if not parsedItem then return false end
+
+	-- Match item name (case-insensitive, trim whitespace)
+	local function clean(str)
+		return string.lower(string.gsub(str, "^%s*(.-)%s*$", "%1"))
+	end
+
+	if clean(parsedItem.itemName) ~= clean(wantedName) then
+		return false
+	end
+
+	-- ✅ Allow equal or more
+	if parsedItem.weight >= wantedWeight then
+		return false
+	end
+
+	-- Check if any wanted mutation is present
+	local hasMutation = false
+	for _, wanted in ipairs(wantedMutations) do
+		for _, actual in ipairs(parsedItem.mutations) do
+			if wanted == actual then
+				hasMutation = true
+				break
+			end
+		end
+		if hasMutation then break end
+	end
+
+	return hasMutation
+end
 function compareCleanedNames(str1, str2)
 	-- Remove all spaces and convert to lowercase
 	local clean1 = string.lower(string.gsub(str1, "%s+", ""))
@@ -41,12 +73,7 @@ function compareCleanedNames(str1, str2)
 
 	return clean1 == clean2
 end
-function printdata(a)
-	print(a.Weight.Value)
-	print("")
-
-end
-function FindBestPlant()
+function ClaimTranquilPlant()
 	if PlayerFarm == nil then
 		log("Player farm not found")
 	end
@@ -55,19 +82,36 @@ function FindBestPlant()
 			log("Found a good plant")
 			if MotherPlant:FindFirstChild("Fruits") then
 				for i, plant:Instance in pairs(MotherPlant.Fruits:GetChildren()) do
-					print("Found: "..tostring(plant.Weight.Value))
 					if plant.Weight.Value >= tonumber(WantedWeight) then
 						if plant:GetAttribute("Tranquil") then
 							for i,part in pairs(plant:GetChildren()) do
 								if part:FindFirstChild("ProximityPrompt") then
 									fireproximityprompt(part:FindFirstChild("ProximityPrompt"))
+									return
 								end
 							end
 						end
 					end
 				end
+			else
+				if MotherPlant:GetAttribute("Tranquil") then
+					for i,part in pairs(MotherPlant:GetChildren()) do
+						if part:FindFirstChild("ProximityPrompt") then
+							fireproximityprompt(part:FindFirstChild("ProximityPrompt"))
+							return
+						end
+					end
+				end
 			end
 		end
+	end
+end
+function ScanBackpack()
+	for i, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+		if matchesCriteria(item.Name, WantedPlant, "0.01", "Tranquil") then
+			warn("FOUND IN BACKPACK")
+		end
+
 	end
 end
 task.spawn(function()
@@ -76,4 +120,4 @@ task.spawn(function()
 		wait(1)
 	end
 end)
-FindBestPlant()
+ScanBackpack()
