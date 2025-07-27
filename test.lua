@@ -146,7 +146,9 @@ function DumpIventory()
 			iventory["Plants"][item] = item
 		end
 	end
-	print(iventory)
+	for i,v in pairs(iventory["Plants"]) do
+		print(v)
+	end
 	return iventory -- <- ADD THIS
 end
 function ScanFarm()
