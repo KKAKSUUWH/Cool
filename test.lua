@@ -47,7 +47,7 @@ function matchesCriteria(parsedItem, wantedName, wantedWeight, wantedMutations)
 	end
 
 	-- ✅ Allow equal or more
-	if tonumber(parsedItem.weight) < wantedWeight then
+	if tonumber(parsedItem.weight) < tonumber(wantedWeight) then
 		return false
 	end
 
