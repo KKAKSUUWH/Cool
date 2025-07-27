@@ -34,7 +34,31 @@ function parseItemInfo(itemString)
 
 	return itemName, weight
 end
+function parseBackpackItemInfo(itemString)
+	-- Extract mutations, item name, and weight
+	local mutationsStr, itemName, weightWithUnit = string.match(itemString, "^%[(.-)%]%s+(.-)%s+%[(.-)%]$")
+	if not mutationsStr or not itemName or not weightWithUnit then
+		return nil
+	end
 
+	-- Split mutations into a table
+	local mutations = {}
+	for mut in string.gmatch(mutationsStr, "[^,%s]+") do
+		table.insert(mutations, mut)
+	end
+
+	-- Extract numeric weight
+	local weight = tonumber(string.match(weightWithUnit, "([%d%.]+)"))
+	if not weight then
+		return nil
+	end
+
+	return {
+		mutations = mutations,
+		itemName = itemName,
+		weight = weight,
+	}
+end
 function matchesCriteria(parsedItem, wantedName, wantedWeight, wantedMutations)
 	if not parsedItem then return false end
 
@@ -108,7 +132,7 @@ function ClaimTranquilPlant()
 end
 function ScanBackpack()
 	for i, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-		if matchesCriteria(item.Name, WantedPlant, "0.01", "Tranquil") then
+		if matchesCriteria(parseBackpackItemInfo(item.Name), WantedPlant, "0.01", "Tranquil") then
 			warn("FOUND IN BACKPACK")
 		end
 
