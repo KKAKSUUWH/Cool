@@ -131,6 +131,23 @@ function DumpFarm()
 	end
 	return Fruits
 end
+function DumpIventory()
+	local iventory = {
+		["Seeds"] = {},
+		["Plants"] = {},
+		["Tools"] = {}
+	}
+	for i, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+		if item:FindFirstChild("SprinklerHandler") then
+			iventory["Tools"][item] = item
+		elseif item:FindFirstChild("Seed Local Script") then
+			iventory["Seeds"][item] = item
+		elseif item:FindFirstChild("Item_String") then
+			iventory["Plants"][item] = item
+		end
+	end
+	return iventory -- <- ADD THIS
+end
 function ScanFarm()
 	for i,MotherPlant in pairs(PlayerFarm:WaitForChild("Important"):WaitForChild("Plants_Physical"):GetChildren()) do
 		if compareCleanedNames(MotherPlant.Name, WantedPlant) then
@@ -151,44 +168,11 @@ function ScanFarm()
 	end
 end
 
-function ClaimTranquilPlant()
-	if PlayerFarm == nil then
-		log("Player farm not found")
-	end
-	for i,MotherPlant in pairs(PlayerFarm:WaitForChild("Important"):WaitForChild("Plants_Physical"):GetChildren()) do
-		if compareCleanedNames(MotherPlant.Name, WantedPlant) then
-			log("Found a good plant")
-			if MotherPlant:FindFirstChild("Fruits") then
-				for i, plant:Instance in pairs(MotherPlant.Fruits:GetChildren()) do
-					if plant.Weight.Value >= tonumber(WantedWeight) then
-						if plant:GetAttribute("Tranquil") then
-							for i,part in pairs(plant:GetChildren()) do
-								if part:FindFirstChild("ProximityPrompt") then
-									fireproximityprompt(part:FindFirstChild("ProximityPrompt"))
-									return
-								end
-							end
-						end
-					end
-				end
-			else
-				if MotherPlant:GetAttribute("Tranquil") then
-					for i,part in pairs(MotherPlant:GetChildren()) do
-						if part:FindFirstChild("ProximityPrompt") then
-							fireproximityprompt(part:FindFirstChild("ProximityPrompt"))
-							return
-						end
-					end
-				end
-			end
-		end
-	end
-end
 function FetchTask()
 	WantedPlant,WantedWeight = parseItemInfo(game.Workspace:WaitForChild("Interaction").UpdateItems["Corrupted Zen"]["Zen Platform"].BillboardPart.BillboardGui.ShecklesAmountFrame.ShecklesAmountLabel.Text)
 end
-function ScanBackpack()
-	for i, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+function GetTranquil()
+	for i, item in pairs(DumpIventory()["Plants"]) do
 		if matchesCriteria(ParseToolName(item.Name), WantedPlant, tonumber(WantedWeight), {"Tranquil"}) then
 			game.Players.LocalPlayer.Character.Humanoid:EquipTool(item)
 			return
@@ -223,32 +207,49 @@ end
 
 -- check needed plants
 
-for i,v in pairs(DumpFarm()) do
-	function GetCleanName(string)
-		return string.lower(string.gsub(string, "%s+", ""))
+function GetCleanName(str)
+	return string.lower(string.gsub(str, "%s+", ""))
+end
+
+-- Get list of needed plants
+local found = {}
+local missing = {}
+local plantedNames = {}
+local inventorySeeds = {}
+
+local farmPlants = DumpFarm()
+local inventory = DumpIventory()
+
+-- Collect all currently planted fruits
+for _, plant in pairs(farmPlants) do
+	local cleanedName = GetCleanName(plant.Name)
+	plantedNames[cleanedName] = true
+end
+
+-- Collect all seeds from inventory
+for seedItem, _ in pairs(inventory["Seeds"]) do
+	local cleanedName = GetCleanName(seedItem.Name)
+	inventorySeeds[cleanedName] = true
+end
+
+-- Check for each needed plant
+for _, needed in ipairs(needed_plant) do
+	local cleanedNeeded = GetCleanName(needed)
+	if plantedNames[cleanedNeeded] then
+		table.insert(found, needed)
+	else
+		local hasSeed = inventorySeeds[cleanedNeeded]
+		table.insert(missing, { name = needed, hasSeed = hasSeed })
 	end
-	local found = {}
-	local missing = {}
-	local plantedNames = {}
-	local farmPlants = DumpFarm()
+end
 
-	-- Collect all currently planted fruits
-	for _, plant in pairs(farmPlants) do
-		local cleanedName = GetCleanName(plant.Name)
-		plantedNames[cleanedName] = true
-	end 
-
-	for _, needed in ipairs(needed_plant) do
-		local cleanedNeeded = GetCleanName(needed)
-		if plantedNames[cleanedNeeded] then
-			table.insert(found, needed)
-		else
-			table.insert(missing, needed)
-		end
-	end
-
+-- Log missing
+if #missing ~= 0 then
 	log("❌ Missing plants:")
-	for _, name in ipairs(missing) do
-		log("  - " .. name)
+	for _, entry in ipairs(missing) do
+		local seedStatus = entry.hasSeed and "✅ yes" or "❌ no"
+		log("  - " .. entry.name .. " (seed preset: " .. seedStatus .. ")")
 	end
+else
+	log("✅ All plants or seeds are present")
 end
