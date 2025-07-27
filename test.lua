@@ -132,7 +132,7 @@ function ClaimTranquilPlant()
 end
 function ScanBackpack()
 	for i, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-		if matchesCriteria(ParseToolName(item.Name), WantedPlant, tonumber("0.01"), "Tranquil") then
+		if matchesCriteria(ParseToolName(item.Name), WantedPlant, tonumber("0.01"), {"Tranquil"}) then
 			warn("FOUND IN BACKPACK")
 		end
 
