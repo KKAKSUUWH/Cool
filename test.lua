@@ -51,11 +51,11 @@ function FindBestPlant()
 		log("Player farm not found")
 	end
 	for i,MotherPlant in pairs(PlayerFarm:WaitForChild("Important"):WaitForChild("Plants_Physical"):GetChildren()) do
-		print(MotherPlant.Name)
 		if compareCleanedNames(MotherPlant.Name, WantedPlant) then
 			log("Found a good plant")
 			if MotherPlant:FindFirstChild("Fruits") then
 				for i, plant:Instance in pairs(MotherPlant.Fruits:GetChildren()) do
+					print("Found: "..tostring(plant.Weight.Value))
 					if plant.Weight.Value >= tonumber(WantedWeight) then
 						if plant:GetAttribute("Tranquil") then
 							for i,part in pairs(plant:GetChildren()) do
