@@ -55,10 +55,15 @@ function FindBestPlant()
 		if compareCleanedNames(MotherPlant.Name, WantedPlant) then
 			log("Found a good plant")
 			if MotherPlant:FindFirstChild("Fruits") then
-				log("Plant is a multiHarvest plant")
-				for i, plant in pairs(MotherPlant.Fruits:GetChildren()) do
+				for i, plant:Instance in pairs(MotherPlant.Fruits:GetChildren()) do
 					if plant.Weight.Value >= tonumber(WantedWeight) then
-						warn("FOUND")
+						if plant:GetAttribute("Tranquil") then
+							for i,part in pairs(plant:GetChildren()) do
+								if part:FindFirstChild("ProximityPrompt") then
+									fireproximityprompt(part:FindFirstChild("ProximityPrompt"))
+								end
+							end
+						end
 					end
 				end
 			end
