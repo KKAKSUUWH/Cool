@@ -243,13 +243,8 @@ for _, needed in ipairs(needed_plant) do
 	end
 end
 
--- Log missing
-if #missing ~= 0 then
-	log("❌ Missing plants:")
-	for _, entry in ipairs(missing) do
-		local seedStatus = entry.hasSeed and "✅ yes" or "❌ no"
-		log("  - " .. entry.name .. " (seed preset: " .. seedStatus .. ")")
-	end
-else
-	log("✅ All plants or seeds are present")
+log("❌ Missing plants:")
+for _, entry in ipairs(missing) do
+	local seedStatus = entry.hasSeed and "✅ yes" or "❌ no"
+	log("  - " .. entry.name .. " (seed preset: " .. seedStatus .. ")")
 end
