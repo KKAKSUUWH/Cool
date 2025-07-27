@@ -142,7 +142,7 @@ function DumpIventory()
 			iventory["Tools"][item] = item
 		elseif item:FindFirstChild("Seed Local Script") then
 			iventory["Seeds"][item] = item
-		elseif item:FindFirstChild("Item_String") then
+		elseif item:FindFirstChild("Weight") then
 			iventory["Plants"][item] = item
 		end
 	end
