@@ -133,7 +133,8 @@ end
 function ScanBackpack()
 	for i, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
 		if matchesCriteria(ParseToolName(item.Name), WantedPlant, tonumber("0.01"), {"Tranquil"}) then
-			warn("FOUND IN BACKPACK")
+			game.Players.LocalPlayer.Character.Humanoid:EquipTool(item)
+			return
 		end
 
 	end
