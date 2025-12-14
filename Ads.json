@@ -1,0 +1,27 @@
+[
+    {
+      "id": "1",
+      "title": "Premium Proxy Network",
+      "description": "Access high-speed residential proxies with 99.9% uptime",
+      "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=400&fit=crop",
+      "cta": "Learn More",
+      "link": "https://google.com"
+    },
+    {
+      "id": "2",
+      "title": "Cloud Processing Power",
+      "description": "Scale your operations with enterprise-grade cloud infrastructure",
+      "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=400&fit=crop",
+      "cta": "Get Started",
+      "link": "https://google.com"
+    },
+    {
+      "id": "3",
+      "title": "Advanced Analytics",
+      "description": "Real-time insights and performance monitoring for your tools",
+      "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=400&fit=crop",
+      "cta": "View Plans",
+      "link": "https://google.com"
+    }
+  ]
+  
