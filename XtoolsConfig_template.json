@@ -20,7 +20,8 @@
     "Solvers_Keys": {
       "Rosolve": "",
       "Devious": "",
-      "Cds": ""
+      "Cds": "",
+      "Funbypass" : "FUN-Z1I4TGL5J4YYFL26"
     },
     "Bruter": {
       "PassValidsToChecker": true,
@@ -71,4 +72,5 @@
       "XtoolsConfigV": "" 
     }
   }
+
   
