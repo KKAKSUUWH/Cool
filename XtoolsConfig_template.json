@@ -1,77 +1,75 @@
 {
-    "Tool_Settings": {
-      "DefaultThreads": 50,
-      "HttpTimeOut": 50,
-      "AskForThreads": true,
-      "ShowErrors": true,
-      "OpenInputFolder": false,
-      "WarningOnUnstableSolver": true,
-      "PrintSolvingCaptcha": true,
-      "SolveCaptchaWithSolver": true,
-      "RetryCount": 3,
-      "RetryDelay": 1,
-      "RetryLogging": true,
-      "LicenseKey": "PUT YOUR KEY HERE HERE",
-      "DefaultSolver": "Rosolve",
-      "ChangePassworsToBase": "XtoolsOnTop",
-      "openrouter_api_key": "",
-      "Webhook": ""
+  "Tool_Settings": {
+    "DefaultThreads": 50,
+    "HttpTimeOut" : 50,
+    "ProxyTest" : true,
+    "AskForThreads": true,
+    "ShowErrors": true,
+    "OpenInputFolder": false,
+    "WarningOnUnstableSolver": true,
+    "PrintSolvingCaptcha" : true,
+    "SolveCaptchaWithSolver" : true,
+    "RetryCount": 3,
+    "RetryDelay": 1,
+    "RetryLogging": true,
+    "LicenseKey": " PUT YOUR KEY HERE HERE ",
+    "DefaultSolver": "Rosolve",
+    "ChangePassworsToBase" : "XtoolsOnTop",
+    "openrouter_api_key": "",
+    "Webhook" : ""
+  },
+  "Solvers_Keys": {
+    "Rosolve": "",
+    "Devious" : "",
+    "Cds": "",
+    "Funbypass" : ""
+  },
+  "Bruter": {
+    "PassValidsToChecker": true,
+    "ChangePasswords":false
+  },
+  "Generator": {
+    "PasswordBase": "rnd",
+    "Usertemplate": "rnd"
+  },
+  "GamepassBuyer": {
+    "BuyingGamePass": ""
+  },
+  "Humanizer": {
+    "UseAI": false,
+    "RealisticDisplayes" : false
+  },
+  "GameplaceMassUploader": {
+    "UseAI": true,
+    "GameSettings" : {
+      "privateServerPrice": 0,
+      "isForSale": false,
+      "price": null,
+      "allowPrivateServers": true,
+      "universeAvatarType": "MorphToR6",
+      "playableDevices": ["Computer", "Phone", "Tablet"],
+      "genre": "All"
     },
-    "Solvers_Keys": {
-      "Rosolve": "",
-      "Devious": "",
-      "Cds": "",
-      "Funbypass" : ""
-    },
-    "Bruter": {
-      "PassValidsToChecker": true,
-      "ChangePasswords": false
-    },
-    "Generator": {
-      "PasswordBase": "rnd",
-      "Usertemplate": "rnd"
-    },
-    "GamepassBuyer": {
-      "BuyingGamePass": ""
-    },
-    "Humanizer": {
-      "UseAI": false,
-      "RealisticDisplayes": false
-    },
-    "GameplaceMassUploader": {
-      "UseAI": true,
-      "GameSettings": {
-        "privateServerPrice": 0,
-        "isForSale": false,
-        "price": null,
-        "allowPrivateServers": true,
-        "universeAvatarType": "MorphToR6",
-        "playableDevices": ["Computer", "Phone", "Tablet"],
-        "genre": "All"
-      },
-      "Custome_Name": "",
-      "Custome_Description": ""
-    },
-    "Drainer": {
-      "MainAccountCookie": "",
-      "GameId_GamePass_location": 0
-    },
-    "CookieChecker": {
-      "InDepthChecker": false
-    },
-    "CustomSolver": {
-      "host": "localhost:8080"
-    },
-    "ForumSpammer": {
-      "AutoJoin": true
-    },
-    "PhoneVerif": {
-      "5sim": ""
-    },
-    "IgnoreThis": {
-      "XtoolsConfigV": "" 
-    }
+    "Custome_Name" : "",
+    "Custome_Description" : ""
+  },
+  "Drainer": {
+    "MainAccountCookie": "",
+    "GameId_GamePass_location" : 0
+  },
+  "CookieChecker": {
+    "InDepthChecker":false
+  },
+  "CustomSolver" : {
+    "host" : "localhost:8080"
+  },
+  "ForumSpammer" : {
+    "AutoJoin" : true
+  },
+  "PhoneVerif" : {
+    "5sim" : ""
+  },
+  "IgnoreThis" : {
+    "XtoolsConfigV": "%s"
   }
-
-  
-
+}
