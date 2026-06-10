@@ -1,3 +1,4 @@
+
 {
   "Tool_Settings": {
     "DefaultThreads": 50,
@@ -16,13 +17,15 @@
     "DefaultSolver": "Rosolve",
     "ChangePassworsToBase" : "XtoolsOnTop",
     "openrouter_api_key": "",
-    "Webhook" : ""
+    "Webhook" : "",
+    "DiscordRPC": true
   },
   "Solvers_Keys": {
     "Rosolve": "",
     "Devious" : "",
     "Cds": "",
-    "Funbypass" : ""
+    "Funbypass" : "",
+    "Wtfsolver" : ""
   },
   "Bruter": {
     "PassValidsToChecker": true,
@@ -30,7 +33,8 @@
   },
   "Generator": {
     "PasswordBase": "rnd",
-    "Usertemplate": "rnd"
+    "Usertemplate": "rnd",
+    "UsernameGenerator": "v2"
   },
   "GamepassBuyer": {
     "BuyingGamePass": ""
@@ -55,7 +59,8 @@
   },
   "Drainer": {
     "MainAccountCookie": "",
-    "GameId_GamePass_location" : 0
+    "GameId_GamePass_location" : 0,
+    "User_Browser_Cookies": ""
   },
   "CookieChecker": {
     "InDepthChecker":false
